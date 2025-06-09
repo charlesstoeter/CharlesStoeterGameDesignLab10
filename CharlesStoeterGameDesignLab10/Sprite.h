@@ -40,7 +40,7 @@ private:
 	float freezeStartTime = 0;  // for FreezeSprite freeze delay
 	float rotationAngle = 0.0f;// For SpinningSprite
 
-
+	
 
 
 };

@@ -9,8 +9,23 @@ using namespace std;
 
 void sprite::drawSprite()
 {
-	al_draw_bitmap(image[curframe], x, y, 0);
+	if (SpinningSprite) {
+		// Center of the bitmap (pivot point)
+		float cx = al_get_bitmap_width(image[curframe]) / 2.0f;
+		float cy = al_get_bitmap_height(image[curframe]) / 2.0f;
+
+		// Draw rotated at center
+		al_draw_rotated_bitmap(image[curframe],
+			cx, cy,               // pivot point in image
+			x + cx, y + cy,       // destination center
+			rotationAngle, 0);
+	}
+	else {
+		// Default draw
+		al_draw_bitmap(image[curframe], x, y, 0);
+	}
 }
+
 
 void sprite::updatesprite(double currentTime) {
 
@@ -45,7 +60,11 @@ void sprite::updatesprite(double currentTime) {
 	}
 
 
-
+	if (SpinningSprite) {
+		rotationAngle += 0.05f;  // Adjust speed as needed
+		if (rotationAngle > ALLEGRO_PI * 2)
+			rotationAngle -= ALLEGRO_PI * 2; // wrap angle
+	}
 	
 }
 
