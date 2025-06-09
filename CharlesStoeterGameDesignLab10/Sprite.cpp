@@ -1,4 +1,4 @@
-#include <allegro5\allegro.h>
+﻿#include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
 #include <stdio.h>
 #include "Sprite.h"
@@ -10,18 +10,31 @@ using namespace std;
 void sprite::drawSprite()
 {
 	if (SpinningSprite) {
-		// Center of the bitmap (pivot point)
 		float cx = al_get_bitmap_width(image[curframe]) / 2.0f;
 		float cy = al_get_bitmap_height(image[curframe]) / 2.0f;
-
-		// Draw rotated at center
-		al_draw_rotated_bitmap(image[curframe],
-			cx, cy,               // pivot point in image
-			x + cx, y + cy,       // destination center
+		al_draw_tinted_rotated_bitmap(image[curframe],
+			currentColor,  // 🆕 Tinted!
+			cx, cy,
+			x + cx, y + cy,
 			rotationAngle, 0);
 	}
+	else if (ScaredSprite) {
+		al_draw_tinted_bitmap(image[curframe], currentColor, x, y, 0); // 🆕
+	}
+	else if (BabySprite) {
+		float cx = al_get_bitmap_width(image[curframe]) / 2.0f;
+		float cy = al_get_bitmap_height(image[curframe]) / 2.0f;
+		al_draw_tinted_scaled_bitmap(
+			image[curframe],                      // bitmap
+			al_map_rgb(255, 255, 255),            // tint color (default: white)
+			0, 0, width, height,                  // source region
+			x, y, width * scaleFactor, height * scaleFactor,  // destination size
+			0                                      // flags
+		);
+	}
+
+
 	else {
-		// Default draw
 		al_draw_bitmap(image[curframe], x, y, 0);
 	}
 }
@@ -32,8 +45,22 @@ void sprite::updatesprite(double currentTime) {
 
 
 	if (FreezeSprite && CollisionIsTrue && (currentTime - freezeStartTime < 5)) {
-		// frozen � don�t move
+		// Still frozen — do not update
 		return;
+	}
+
+	// Unfreeze logic
+	if (FreezeSprite && CollisionIsTrue && (currentTime - freezeStartTime >= 5)) {
+		CollisionIsTrue = false;
+		cout << "FreezeSprite: UNFROZEN!\n";
+	}
+
+	// Simulate freeze every 6 seconds
+	if (FreezeSprite && (currentTime - lastCollisionTime > 6)) {
+		lastCollisionTime = currentTime;
+		freezeStartTime = currentTime;
+		CollisionIsTrue = true;
+		cout << "FreezeSprite: FROZEN for 5 seconds!\n";
 	}
 
 	//update x position
@@ -65,6 +92,36 @@ void sprite::updatesprite(double currentTime) {
 		if (rotationAngle > ALLEGRO_PI * 2)
 			rotationAngle -= ALLEGRO_PI * 2; // wrap angle
 	}
+
+
+	if (ScaredSprite && (currentTime - lastCollisionTime > 1)) {
+		lastCollisionTime = currentTime;
+		currentColor = getRandomColor(); // change color
+		x = rand() % 600;  // teleport within screen bounds
+		y = rand() % 400;
+		cout << "ScaredSprite: Color changed + teleported!\n";
+	} 
+
+
+
+	if (BabySprite && (currentTime - lastCollisionTime > 3)) { // Simulate 1 collision every 3s
+		lastCollisionTime = currentTime;
+
+		// Shrink in half
+		scaleFactor *= 0.5f;
+		x = rand() % 600;
+		y = rand() % 400;
+
+		if (scaleFactor < 0.1f) {
+			cout << "BabySprite died\n";
+			// Optional: deactivate movement or reset
+		}
+		else {
+			cout << "BabySprite scaled to: " << scaleFactor << "\n";
+		}
+	}
+
+
 	
 }
 
@@ -169,3 +226,8 @@ void sprite::assignRandomSpecialty() {
 
 
 
+
+
+ALLEGRO_COLOR sprite::getRandomColor() {
+	return al_map_rgb(rand() % 256, rand() % 256, rand() % 256);
+}

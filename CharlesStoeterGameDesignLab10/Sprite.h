@@ -40,7 +40,9 @@ private:
 	float freezeStartTime = 0;  // for FreezeSprite freeze delay
 	float rotationAngle = 0.0f;// For SpinningSprite
 
-	
+	ALLEGRO_COLOR currentColor = al_map_rgb(255, 255, 255);
+
+	ALLEGRO_COLOR getRandomColor();
 
 
 };
