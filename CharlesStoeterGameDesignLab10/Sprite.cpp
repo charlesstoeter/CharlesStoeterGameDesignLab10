@@ -12,8 +12,15 @@ void sprite::drawSprite()
 	al_draw_bitmap(image[curframe], x, y, 0);
 }
 
-void sprite::updatesprite()
-{
+void sprite::updatesprite(double currentTime) {
+
+
+
+	if (FreezeSprite && CollisionIsTrue && (currentTime - freezeStartTime < 5)) {
+		// frozen — don’t move
+		return;
+	}
+
 	//update x position
 	if (++xcount > xdelay)
 	{
@@ -36,6 +43,10 @@ void sprite::updatesprite()
 		if (curframe >= maxframe)
 			curframe = 0;
 	}
+
+
+
+	
 }
 
 void sprite::bouncesprite(int SCREEN_W, int SCREEN_H)

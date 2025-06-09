@@ -89,7 +89,7 @@ int main(void)
 
 
 			redraw = false;
-			alien.updatesprite();
+			alien.updatesprite(al_get_time());
 			alien.drawSprite();
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

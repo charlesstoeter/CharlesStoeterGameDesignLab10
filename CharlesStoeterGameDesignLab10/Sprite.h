@@ -3,7 +3,7 @@ class sprite
 {
 public:
 	~sprite();
-	void updatesprite();
+	void updatesprite(double currentTime);
 	void bouncesprite(int SCREEN_W, int SCREEN_H);
 	void load_animated_sprite(int size);
 	void drawSprite();
@@ -38,6 +38,7 @@ private:
 	float lastCollisionTime = 0; // time of last collision
 	float scaleFactor = 1.0f;  // for BabySprite shrinking
 	float freezeStartTime = 0;  // for FreezeSprite freeze delay
+	float rotationAngle = 0.0f;// For SpinningSprite
 
 
 
