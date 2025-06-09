@@ -22,7 +22,7 @@ public:
 		x = newX; y = newY; 
 	}
 
-
+	void handleCollision();
 
 
 

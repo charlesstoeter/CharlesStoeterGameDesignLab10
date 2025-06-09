@@ -4,6 +4,8 @@
 #include <iostream>
 #include <ctime> 
 
+void checkCollision(sprite aliens[], int index, int arraySize, int screenW, int screenH);
+
 using namespace std;
 
 int main(void)
@@ -76,6 +78,7 @@ int main(void)
 		{
 			for (int i = 0; i < NUM_SPRITES; i++) {
 				aliens[i].bouncesprite(width, height);
+				checkCollision(aliens, i, NUM_SPRITES, width, height); // check after bouncing
 			}
 
 			redraw = true;
@@ -125,7 +128,7 @@ int main(void)
 
 
 	al_destroy_event_queue(event_queue);
-	al_destroy_display(display);						//destroy our display object
+	al_destroy_display(display); //destroy our display object
 
 	return 0;
 }

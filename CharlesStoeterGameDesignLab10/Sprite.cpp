@@ -19,7 +19,7 @@ void sprite::drawSprite()
 			rotationAngle, 0);
 	}
 	else if (ScaredSprite) {
-		al_draw_tinted_bitmap(image[curframe], currentColor, x, y, 0); // 🆕
+		al_draw_tinted_bitmap(image[curframe], currentColor, x, y, 0); 
 	}
 	else if (BabySprite) {
 		float cx = al_get_bitmap_width(image[curframe]) / 2.0f;
@@ -55,13 +55,7 @@ void sprite::updatesprite(double currentTime) {
 		cout << "FreezeSprite: UNFROZEN!\n";
 	}
 
-	// Simulate freeze every 6 seconds
-	if (FreezeSprite && (currentTime - lastCollisionTime > 6)) {
-		lastCollisionTime = currentTime;
-		freezeStartTime = currentTime;
-		CollisionIsTrue = true;
-		cout << "FreezeSprite: FROZEN for 5 seconds!\n";
-	}
+	
 
 	//update x position
 	if (++xcount > xdelay)
@@ -94,32 +88,11 @@ void sprite::updatesprite(double currentTime) {
 	}
 
 
-	if (ScaredSprite && (currentTime - lastCollisionTime > 1)) {
-		lastCollisionTime = currentTime;
-		currentColor = getRandomColor(); // change color
-		x = rand() % 600;  // teleport within screen bounds
-		y = rand() % 400;
-		cout << "ScaredSprite: Color changed + teleported!\n";
-	} 
+	
 
 
 
-	if (BabySprite && (currentTime - lastCollisionTime > 3)) { // Simulate 1 collision every 3s
-		lastCollisionTime = currentTime;
-
-		// Shrink in half
-		scaleFactor *= 0.5f;
-		x = rand() % 600;
-		y = rand() % 400;
-
-		if (scaleFactor < 0.1f) {
-			cout << "BabySprite died\n";
-			// Optional: deactivate movement or reset
-		}
-		else {
-			cout << "BabySprite scaled to: " << scaleFactor << "\n";
-		}
-	}
+	
 
 
 	
@@ -236,4 +209,64 @@ void sprite::assignRandomSpecialty() {
 
 ALLEGRO_COLOR sprite::getRandomColor() {
 	return al_map_rgb(rand() % 256, rand() % 256, rand() % 256);
+}
+
+
+
+void checkCollision(sprite aliens[], int index, int arraySize, int screenW, int screenH)
+{
+	for (int i = 0; i < arraySize; i++) {
+		if (i == index) continue; // don't check against itself
+
+		int ax = aliens[index].getX();
+		int ay = aliens[index].getY();
+		int bx = aliens[i].getX();
+		int by = aliens[i].getY();
+
+		if (abs(ax - bx) < 50 && abs(ay - by) < 50) { // you can tweak 50 based on sprite size
+			aliens[index].handleCollision();  // you will define this to update flags
+		}
+	}
+}
+
+
+void sprite::handleCollision() {
+	double currentTime = al_get_time();
+
+	if (ScaredSprite) {
+		currentColor = getRandomColor(); // change color
+		x = rand() % 600;
+		y = rand() % 400;
+		lastCollisionTime = currentTime;
+		cout << "ScaredSprite: Color changed + teleported!\n";
+	}
+
+	else if (BabySprite) {
+		scaleFactor *= 0.5f;
+		x = rand() % 600;
+		y = rand() % 400;
+		lastCollisionTime = currentTime;
+
+		if (scaleFactor < 0.1f) {
+			cout << "BabySprite died\n";
+			// You could disable it here, or set a flag to hide it
+		}
+		else {
+			cout << "BabySprite scaled to: " << scaleFactor << "\n";
+		}
+	}
+
+	else if (SpinningSprite) {
+		// For now, just print a message or add effects if needed
+		cout << "SpinningSprite collided!\n";
+	}
+
+	else if (FreezeSprite) {
+		if (!CollisionIsTrue) {
+			CollisionIsTrue = true;
+			freezeStartTime = currentTime;
+			lastCollisionTime = currentTime;
+			cout << "FreezeSprite: FROZEN for 5 seconds!\n";
+		}
+	}
 }
