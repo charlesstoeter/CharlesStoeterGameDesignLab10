@@ -2,6 +2,7 @@
 #include <allegro5\allegro_image.h>
 #include <stdio.h>
 #include "Sprite.h"
+#include <cstdlib>
 
 #include <iostream>
 using namespace std;
@@ -95,6 +96,45 @@ sprite::~sprite()
 {
 	for (int i = 0; i < maxframe; i++)
 		al_destroy_bitmap(image[i]);
+}
+
+
+
+
+
+void sprite::assignRandomSpecialty() {
+	// Reset all specialty flags
+	SpinningSprite = false;
+	ScaredSprite = false;
+	BabySprite = false;
+	FreezeSprite = false;
+
+	// Randomly assign one specialty type
+	int type = rand() % 4;  // 0 to 3
+
+	switch (type) {
+	case 0:
+		SpinningSprite = true;
+		cout << "Assigned: SpinningSprite\n";
+		break;
+	case 1:
+		ScaredSprite = true;
+		cout << "Assigned: ScaredSprite\n";
+		break;
+	case 2:
+		BabySprite = true;
+		scaleFactor = 1.0f;
+		cout << "Assigned: BabySprite\n";
+		break;
+	case 3:
+		FreezeSprite = true;
+		cout << "Assigned: FreezeSprite\n";
+		break;
+	}
+
+	CollisionIsTrue = false;
+	lastCollisionTime = 0;
+	freezeStartTime = 0;
 }
 
 

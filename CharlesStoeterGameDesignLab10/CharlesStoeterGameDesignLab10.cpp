@@ -2,6 +2,8 @@
 #include <allegro5\allegro_image.h>
 #include "Sprite.h"
 #include <iostream>
+#include <ctime> 
+
 using namespace std;
 
 int main(void)
@@ -13,6 +15,8 @@ int main(void)
 
 	bool redraw = true;
 	const int FPS = 60;
+
+	srand(time(NULL));
 
 
 	//allegro variable
@@ -43,6 +47,8 @@ int main(void)
 	al_start_timer(timer);
 
 	alien.load_animated_sprite(9);
+
+	alien.assignRandomSpecialty(); // assigns a behvior 
 
 	while (!done)
 	{
