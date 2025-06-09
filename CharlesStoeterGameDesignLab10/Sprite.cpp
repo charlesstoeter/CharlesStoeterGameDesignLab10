@@ -167,6 +167,10 @@ void sprite::load_animated_sprite(int size)
 	{
 		sprintf_s(s, "Alien%d.bmp", n);
 		image[n] = al_load_bitmap(s);
+		if (!image[n]) {
+			cout << "Failed to load bitmap: " << s << endl;
+			exit(1); // Or handle it more gracefully
+		}
 
 		al_convert_mask_to_alpha(image[n], al_map_rgb(255, 255, 255));
 	}
@@ -195,6 +199,8 @@ void sprite::assignRandomSpecialty() {
 	ScaredSprite = false;
 	BabySprite = false;
 	FreezeSprite = false;
+
+	currentColor = al_map_rgb(255, 255, 255);
 
 	// Randomly assign one specialty type
 	int type = rand() % 4;  // 0 to 3

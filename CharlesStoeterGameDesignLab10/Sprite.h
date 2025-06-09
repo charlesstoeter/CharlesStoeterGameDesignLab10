@@ -18,6 +18,13 @@ public:
 
 	void assignRandomSpecialty(); // Assign one random behavior 
 
+	void setPosition(int newX, int newY) {
+		x = newX; y = newY; 
+	}
+
+
+
+
 
 private:
 	int x, y;
@@ -40,7 +47,7 @@ private:
 	float freezeStartTime = 0;  // for FreezeSprite freeze delay
 	float rotationAngle = 0.0f;// For SpinningSprite
 
-	ALLEGRO_COLOR currentColor = al_map_rgb(255, 255, 255);
+	ALLEGRO_COLOR currentColor;
 
 	ALLEGRO_COLOR getRandomColor();
 
