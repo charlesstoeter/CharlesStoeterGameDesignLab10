@@ -38,12 +38,12 @@ int main(void)
 
 
 	//program init
-	if (!al_init())										//initialize Allegro
+	if (!al_init())	//initialize Allegro
 		return -1;
 
-	display = al_create_display(width, height);			//create our display object
+	display = al_create_display(width, height);//create our display object
 
-	if (!display)										//test display object
+	if (!display)//test display object
 		return -1;
 
 	al_install_keyboard();
@@ -57,7 +57,7 @@ int main(void)
 		aliens[i].setPosition(rand() % (width - 64), rand() % (height - 64));
 	}
 
-	//addon init
+	
 	
 	timer = al_create_timer(1.0 / FPS);
 

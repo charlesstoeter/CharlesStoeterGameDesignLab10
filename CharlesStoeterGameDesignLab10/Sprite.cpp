@@ -13,7 +13,7 @@ void sprite::drawSprite()
 		float cx = al_get_bitmap_width(image[curframe]) / 2.0f;
 		float cy = al_get_bitmap_height(image[curframe]) / 2.0f;
 		al_draw_tinted_rotated_bitmap(image[curframe],
-			currentColor,  // 🆕 Tinted!
+			currentColor,
 			cx, cy,
 			x + cx, y + cy,
 			rotationAngle, 0);
@@ -25,11 +25,11 @@ void sprite::drawSprite()
 		float cx = al_get_bitmap_width(image[curframe]) / 2.0f;
 		float cy = al_get_bitmap_height(image[curframe]) / 2.0f;
 		al_draw_tinted_scaled_bitmap(
-			image[curframe],                      // bitmap
-			al_map_rgb(255, 255, 255),            // tint color (default: white)
-			0, 0, width, height,                  // source region
-			x, y, width * scaleFactor, height * scaleFactor,  // destination size
-			0                                      // flags
+			image[curframe], 
+			al_map_rgb(255, 255, 255), 
+			0, 0, width, height, 
+			x, y, width * scaleFactor, height * scaleFactor, 
+			0                                     
 		);
 	}
 
@@ -45,11 +45,11 @@ void sprite::updatesprite(double currentTime) {
 
 
 	if (FreezeSprite && CollisionIsTrue && (currentTime - freezeStartTime < 5)) {
-		// Still frozen — do not update
+		
 		return;
 	}
 
-	// Unfreeze logic
+	
 	if (FreezeSprite && CollisionIsTrue && (currentTime - freezeStartTime >= 5)) {
 		CollisionIsTrue = false;
 		cout << "FreezeSprite: UNFROZEN!\n";
@@ -223,8 +223,8 @@ void checkCollision(sprite aliens[], int index, int arraySize, int screenW, int 
 		int bx = aliens[i].getX();
 		int by = aliens[i].getY();
 
-		if (abs(ax - bx) < 50 && abs(ay - by) < 50) { // you can tweak 50 based on sprite size
-			aliens[index].handleCollision();  // you will define this to update flags
+		if (abs(ax - bx) < 50 && abs(ay - by) < 50) {
+			aliens[index].handleCollision(); 
 		}
 	}
 }
@@ -249,7 +249,7 @@ void sprite::handleCollision() {
 
 		if (scaleFactor < 0.1f) {
 			cout << "BabySprite died\n";
-			// You could disable it here, or set a flag to hide it
+			
 		}
 		else {
 			cout << "BabySprite scaled to: " << scaleFactor << "\n";
@@ -257,7 +257,7 @@ void sprite::handleCollision() {
 	}
 
 	else if (SpinningSprite) {
-		// For now, just print a message or add effects if needed
+		
 		cout << "SpinningSprite collided!\n";
 	}
 
